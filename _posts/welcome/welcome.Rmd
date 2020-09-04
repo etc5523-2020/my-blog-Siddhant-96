@@ -164,4 +164,24 @@ Another startling revelation is the fact that event cancellation was relaxed to 
 # References
 
 - Kamil, A. (2020). Role of Public Relations in Crisis Management with the Coronavirus Crisis as an Example: A Case Study on the UAE. Global Media Journal, 18(35), 1-6.
-- Guidotti, E., Ardia, D., (2020), "COVID-19 Data Hub", Journal of Open Source Software 5(51):2376, doi: 10.21105/joss.02376.
+
+- World Bank Open Data (2018), https://data.worldbank.org/indicator/SP.POP.TOTL
+
+- Hale Thomas, Sam Webster, Anna Petherick, Toby Phillips, and Beatriz Kira (2020). Oxford COVID-19 Government Response Tracker, Blavatnik
+  School of Government.
+
+- Our World in Data (2020), https://github.com/owid/covid-19-data
+
+- Johns Hopkins Center for Systems Science and Engineering (2020), https://github.com/CSSEGISandData/COVID-19
+
+- Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+- Hao Zhu (2019). kableExtra: Construct Complex Table with 'kable' and Pipe Syntax. R package version 1.1.0. https://CRAN.R-project.org/package=kableExtra
+  
+- Ramnath Vaidyanathan, Kent Russell and Gareth Watts (2016). sparkline: 'jQuery' Sparkline 'htmlwidget'. R package version 2.0. https://CRAN.R-project.org/package=sparkline
+
+- Yihui Xie, Joe Cheng and Xianying Tan (2020). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.15.
+https://CRAN.R-project.org/package=DT
+
+- Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL
+http://www.jstatsoft.org/v40/i03/.
