@@ -1,0 +1,167 @@
+---
+title: "Tackling COVID19 the UAE way!"
+description: |
+  Welcome to my first blog for ETC5523. I hope you enjoy 
+  reading what I have to say!
+author:
+  - name: SIDDHANT TIRODKAR 
+    affiliation: Monash University
+date: 09-04-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+```
+
+# About
+
+The data used for this blog is acquired from the CRAN package **COVID19** which is available in R and data pertaining only to **UAE** has been selected. Through this blog, we will try and understand the situation of COVID19 in the United Arab Emirates and its influence on the socio-economic front and how it affected the daily lives of it's citizens for the better part of 2020. The data presented is for the duration 22nd January to 31st August 2020. The following variables are critical in order to understand the impact of the pandemic on the country and its subjects.
+
+- *Country* : As the name suggests, it is a abbreviation for United Arab Emirates.
+
+- *Date* : It refers to the date on which the observations were recorded.
+
+- *Cumulative Cases* : It refers to the cumulative number of cases recorded each day.
+
+- *Cumulative Deaths* : It refers to the cumulative number of deaths recorded each day.
+
+- *Cumulative Recoveries* : It refers to the cumulative number of recoveries recorded each day.
+
+- *Event Cancellation Policy* : It consists of 3 stages. **Stage 1** refers to No measures in place to cancel prominent events. **Stage 2** refers to recommended cancelling of prominent events. **Stage 3** refers to compulsary cancellation of events. The reason for including this variable will be explored in the later part of this blog.
+
+- *Gathering Restrictions* : It refers to the restrictions on gatherings put in place by the governing body of the country.
+
+- *Stay Home Restrictions* : It refers to the restrictions imposed on movement of individuals by the governing body of the country.
+
+- *International Movement Restrictions* - It refers to the screening of foreign individuals and residents landing in the country and imposing border closures.
+
+- *Testing Policy* : It refers to the testing policy and specifies if, when and who all can get tested.
+
+- *Contact Tracing* : It refers to the contact tracing policy measures undertaken by the governing body of the country.
+
+As I went along investigating the dataset, I computed a few variables which helped me understand **daily** increase in confirmed cases, deaths and recoveries in the country. So let us comprehend how this pandemic which has brought the entire world to a standstill, affects the beautiful and diverse country of the **United Arab Emirates**.
+
+```{r libraries, echo=FALSE, message=FALSE, warning=FALSE, verbose=FALSE}
+library(tidyverse)
+library(DT)
+library(kableExtra)
+library(COVID19)
+library(sparkline)
+library(lubridate)
+```
+
+```{r loading-data, echo=FALSE}
+UAE_data <- covid19("ARE", verbose = FALSE)
+```
+
+# The Story!
+
+UAE easily has some, if not the most busiest and largest airports in the world. Tourism is one of the most important sources of income in the UAE. Dubai attracts the most number of tourists round the year because of it's beaches, shopping centres and luxury hotels. It attracted a whopping 16.7 million tourists in 2019. All this taken into account and it's strategic partnership relations with China, which was the epicentre of the epidemic the UAE has performed exceptionally well in controlling the spread of the virus. 
+
+The novel coronavirus did not have any major impact on the general public or the economic affairs of the country until mid-March. The number of confirmed cases started increasing consistently after the 3rd week of march to which the government was quick to respond and it was during this time they imposed severe restrictions on social gatherings, lockdown measures, cancelling of major events in the country and eventually closed its border and imposed a travel ban on 24th of March 2020. The number of cases consistently kept increasing till the 2nd week of July after which the case number started declining steadily but slowly.`r sparkline(UAE_data$confirmed)`
+
+In spite of such increased number of confirmed cases, the number of deaths were kept in check. The UAE has reported a total of 387 deaths related to coronavirus and has a death ratio of less than 1%. This has to be attributed to the excellent healthcare facilities and **comprehensive contact tracing** which was started as early as 01st February 2020. `r sparkline(UAE_data$deaths)`
+
+The Figure \@ref(fig:interactive) shows the comprehensive summary for the COVID-19 situation in the UAE for the past 6 months.
+
+
+
+```{r modify-data, echo=FALSE, verbose=FALSE}
+UAE_data_modify <- UAE_data %>% dplyr::select(id,date,confirmed,deaths,recovered,cancel_events, gatherings_restrictions, stay_home_restrictions, international_movement_restrictions, testing_policy, contact_tracing) %>% rename(Country = id) %>% head(223)
+```
+
+```{r country-replace, echo=FALSE}
+UAE_data_modify$Country <- ifelse(UAE_data_modify$Country=="ARE", "UAE", UAE_data_modify$Country)
+```
+
+```{r events-replace, echo=FALSE}
+UAE_data_modify$cancel_events <- ifelse(UAE_data_modify$cancel_events=="0", "stage1", UAE_data_modify$cancel_events) 
+UAE_data_modify$cancel_events <- ifelse(UAE_data_modify$cancel_events=="1", "stage2", UAE_data_modify$cancel_events)
+UAE_data_modify$cancel_events <- ifelse(UAE_data_modify$cancel_events=="2", "stage3", UAE_data_modify$cancel_events)
+```
+
+```{r gatherings-replace, echo=FALSE}
+UAE_data_modify$gatherings_restrictions <- ifelse(UAE_data_modify$gatherings_restrictions=="0", "No Restrictions", UAE_data_modify$gatherings_restrictions)
+UAE_data_modify$gatherings_restrictions <- ifelse(UAE_data_modify$gatherings_restrictions=="2", "100-1000 People allowed", UAE_data_modify$gatherings_restrictions)
+UAE_data_modify$gatherings_restrictions <- ifelse(UAE_data_modify$gatherings_restrictions=="4", "Less than 10", UAE_data_modify$gatherings_restrictions)
+```
+
+```{r home-replace, echo=FALSE}
+UAE_data_modify$stay_home_restrictions <- ifelse(UAE_data_modify$stay_home_restrictions=="0", "No Measures", UAE_data_modify$stay_home_restrictions)
+UAE_data_modify$stay_home_restrictions <- ifelse(UAE_data_modify$stay_home_restrictions=="1", "Recommended staying at home", UAE_data_modify$stay_home_restrictions)
+UAE_data_modify$stay_home_restrictions <- ifelse(UAE_data_modify$stay_home_restrictions=="2", "Restrictions on leaving home", UAE_data_modify$stay_home_restrictions)
+```
+
+```{r international-replace, echo=FALSE}
+UAE_data_modify$international_movement_restrictions <- ifelse(UAE_data_modify$international_movement_restrictions=="0", "No Measures", UAE_data_modify$international_movement_restrictions)
+UAE_data_modify$international_movement_restrictions <- ifelse(UAE_data_modify$international_movement_restrictions=="1", "Screening", UAE_data_modify$international_movement_restrictions)
+UAE_data_modify$international_movement_restrictions <- ifelse(UAE_data_modify$international_movement_restrictions=="2", "Quarantine Measures", UAE_data_modify$international_movement_restrictions)
+UAE_data_modify$international_movement_restrictions <- ifelse(UAE_data_modify$international_movement_restrictions=="3", "Ban on high-risk regions", UAE_data_modify$international_movement_restrictions)
+UAE_data_modify$international_movement_restrictions <- ifelse(UAE_data_modify$international_movement_restrictions=="4", "Border Closed", UAE_data_modify$international_movement_restrictions)
+```
+
+```{r testing-replace, echo=FALSE}
+UAE_data_modify$testing_policy <- ifelse(UAE_data_modify$testing_policy=="0", "No Testing", UAE_data_modify$testing_policy)
+UAE_data_modify$testing_policy <- ifelse(UAE_data_modify$testing_policy=="1", "Testing only if symptoms show", UAE_data_modify$testing_policy)
+UAE_data_modify$testing_policy <- ifelse(UAE_data_modify$testing_policy=="3", "Open Public Testing", UAE_data_modify$testing_policy)
+```
+
+```{r contact-replace, echo=FALSE}
+UAE_data_modify$contact_tracing <- ifelse(UAE_data_modify$contact_tracing=="0", "No Contact Tracing", UAE_data_modify$contact_tracing)
+UAE_data_modify$contact_tracing <- ifelse(UAE_data_modify$contact_tracing=="2", "Comprehensive Contact Tracing", UAE_data_modify$contact_tracing)
+```
+
+
+
+```{r diff-calculation, echo=FALSE}
+UAE_data_new <- UAE_data_modify %>% group_by(Country) %>% 
+    mutate(Daily_Cases = ifelse(date - 1 == lag(date), confirmed - lag(confirmed), NA),
+           Daily_Deaths = ifelse(date - 1 == lag(date), deaths - lag(deaths), NA),
+           Daily_Recoveries = ifelse(date - 1 == lag(date), recovered - lag(recovered), NA))
+```
+
+```{r rename, echo=FALSE}
+UAE_table <- UAE_data_new %>% dplyr::select("Country","date","Daily_Cases","Daily_Deaths","Daily_Recoveries","cancel_events","stay_home_restrictions","international_movement_restrictions","contact_tracing") %>% rename(Date = date, "Events Cancellation Policy" = cancel_events, "Travel Restrictions"= international_movement_restrictions, "Indoor Restrictions" = stay_home_restrictions, "Contact Tracing" = contact_tracing)
+```
+
+```{r interactive, layout="l-body-outset", fig.align="center", fig.cap="Comprehensive COVID19-UAE Synopsis", echo=FALSE}
+DT::datatable(UAE_table, class = 'cell-border stripe', options = list(pageLength = 5))
+```
+
+The concerning observation from table is that since the advent of August, the number of confirmed cases are on the rise again. This could be due to the relaxing of restrictions on gatherings in August and the borders were opened in July, though all passengers are asked to compulsory quarantine for **7-14 days** depending on the country of travel, upon arrival in the country.
+
+```{r add-month, echo=FALSE}
+UAE_data_month <- UAE_data_new%>% mutate(Month = month(date, label = TRUE))
+
+```
+
+```{r summary, echo=FALSE, warning=FALSE, message=FALSE}
+ UAE_summary <- UAE_data_month %>% group_by(Month) %>% summarise(Confirmed_Mean = round(mean(Daily_Cases, na.rm = TRUE),2),
+                                                         Confirmed_SD = round(sd(Daily_Cases, na.rm = TRUE),2),
+                                            Deaths_Mean = round(mean(Daily_Deaths, na.rm = TRUE), 2),
+                                            Deaths_SD = round(sd(Daily_Deaths, na.rm = TRUE),2),
+                                            Recoveries_Mean = round(mean(Daily_Recoveries, na.rm = TRUE),2),
+                                            Recoveries_SD = round(sd(Daily_Recoveries, na.rm = TRUE),2)) %>%
+    kable(caption = "Month-wise Summary Staistics") %>%
+    kable_styling(bootstrap_options = c("striped", "hover"))
+ UAE_summary
+```
+
+Table \@ref(tab:summary) shows the month-wise detailed statistics which include the mean and standard deviation of important figures like confirmed cases, deaths and recoveries. The most important take-away from table is that mean deaths per day have been consistently low as reported earlier and there is a lot of variation in both recoveries and confirmed cases and recoveries in the months of May, June and July and the figures are scattered.
+
+The mean of confirmed cases for the month of August does shows a decreasing trend that is due to lesser cases reported in the first half of the month. The cases increase sporadically in the second half of the month.
+
+
+Another startling revelation is the fact that event cancellation was relaxed to **stage** 2 in the moth of July and the UAE government has given its go ahead to conduct the 13th season of **Indian Premier League(IPL)** which is the largest cricketing event in the world starting September 19. Even though the tournament will be managed and administered with utmost caution and under the presence of **bio-bubbles**. Although it being a progressive and bold decision, it will be interesting to see how the government copes up with the alarming number of rising cases and a potential threat of a second-wave around the corner.
+
+# References
+
+- Kamil, A. (2020). Role of Public Relations in Crisis Management with the Coronavirus Crisis as an Example: A Case Study on the UAE. Global Media Journal, 18(35), 1-6.
+- Guidotti, E., Ardia, D., (2020), "COVID-19 Data Hub", Journal of Open Source Software 5(51):2376, doi: 10.21105/joss.02376.
