@@ -1,5 +1,21 @@
 [
   {
+    "path": "posts/Isr-covid/",
+    "title": "Israel's Innovatiove approach & It's Shortcomings",
+    "description": "\"There's a way to do it better - find it.\" - Thomas A. Edison",
+    "author": [
+      {
+        "name": "SIDDHANT TIRODKAR",
+        "url": {}
+      }
+    ],
+    "date": "2020-09-22",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-09-22T18:52:53+10:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/welcome/",
     "title": "Tackling COVID19 the UAE way!",
     "description": "Welcome to my first blog for ETC5523. I hope you enjoy \nreading what I have to say!",

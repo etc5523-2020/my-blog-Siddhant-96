@@ -1,0 +1,190 @@
+---
+title: "Israel's Innovatiove approach & It's Shortcomings"
+description: |
+  "There's a way to do it better - find it." - Thomas A. Edison
+author:
+  - name: SIDDHANT TIRODKAR 
+    affiliation: Monash University
+date: 09-22-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE, message=FALSE, warning=FALSE, verbose=FALSE}
+library(tidyverse)
+library(DT)
+library(lubridate)
+library(GGally)
+library(gganimate)
+library(plotly)
+library(gifski)
+library(png)
+```
+
+```{r reading-data, echo=FALSE}
+abcd <- read.csv("Data/data-1.csv")
+```
+
+# About
+
+Like the previous blog, data used for this blog is acquired from the CRAN package **COVID19** which is available in R and data pertaining only to **Israel** has been selected. Through this blog, we will try and understand the situation of COVID19 in Israel and it's influence on the lives of people in the country and how the government tackled the state of affairs. The data presented is for the duration 01st January to 18th September 2020. The following variables are critical in order to understand the impact of the pandemic on the country.
+
+- **Date** : It refers to the date on which the observations were recorded.
+
+- **Cumulative Cases** : It refers to the cumulative number of cases recorded each day.
+
+- **Cumulative Deaths** : It refers to the cumulative number of deaths recorded each day.
+
+- **Cumulative Recoveries** : It refers to the cumulative number of recoveries recorded each day.
+
+- **Contact Tracing** : It refers to the contact tracing policy measures undertaken by the governing body of the country.
+
+- **Stringency Index** : It refers to the variation in containment and closure policies only. It is not a tool to judge the appropriateness or effectiveness of the government’s response.
+
+```{r loading-data, echo=FALSE}
+Israel_dat <- abcd %>% filter(id == "ISR")
+```
+
+```{r normal, echo=FALSE}
+Israel_dat$confirmed <- as.numeric(Israel_dat$confirmed)
+Israel_dat$deaths <- as.numeric(Israel_dat$deaths)
+Israel_dat$recovered <- as.numeric(Israel_dat$recovered)
+Israel_dat$date <- as.Date(Israel_dat$date)
+```
+
+```{r new, echo=FALSE}
+Israel_dat_new <- Israel_dat %>% group_by(id) %>% 
+    mutate(Daily_Cases = ifelse(date - 1 == lag(date), confirmed - lag(confirmed), NA),
+           Daily_Deaths = ifelse(date - 1 == lag(date), deaths - lag(deaths), NA),
+           Daily_Recoveries = ifelse(date - 1 == lag(date), recovered - lag(recovered), NA))
+```
+
+```{r old, echo=FALSE}
+Israel_dat_new$id <- NULL
+```
+
+```{r tablenew, fig.cap="The table shows the detailed information regarding the novel coronavirus situation in Israel.", echo=FALSE}
+Israel_dat_new %>% filter(date >= "2020-02-21") %>%
+  dplyr::select("date","Daily_Cases","Daily_Deaths","Daily_Recoveries","contact_tracing","stringency_index") %>%
+DT::datatable(options = list(scrollX = TRUE, pageLength = 5))
+```
+
+Table \@ref(fig:tablenew) shows the comprehensive summary for the COVID-19 situation in Israel for the past 6 months.
+
+# The Controversial Israeli Surveillance.
+
+## Involving ISA a Masterstroke?
+
+The initial wave of COVID-19 hit the country of Israel in the month of march. In the absence of a definitive solution, almost all the countries in the world resorted to the only available alternative of **Contact Tracing**. Contact tracing is the method of tracing all the possible people a person who has rendered a positive corona virus test might have come in contact with. However, the Israeli government was one of the only countries to implement **digital epidemiological investigation** as part of the national effort to track down potential contacts of infected individuals. This was done with the help of **Israel Security Agency (ISA)** which usually engages in managing espionage and terrorism in the country.
+
+```{r plotanim, fig.cap="The animation shows how cases were reported since the beginning of the pandemic in Israel when contact tracing policy was at level 2.", echo=FALSE, warning=FALSE, message=FALSE}
+p1 <- Israel_dat_new %>% filter(contact_tracing == "2") %>%
+     ggplot(aes(x=date,y=Daily_Cases))+
+     geom_line(color = "darkred", linetype="solid")+
+    labs(color = "Type")+
+    xlab("Month")+
+    ylab("Number of Confirmed Cases")+ggtitle("Contact Tracing at Level 2")+
+    transition_reveal(date)
+p1
+```
+
+On **16th March 2020**, the Israeli government approved two emergency regulations allowing mass location tracking of citizens as part of the national effort to slow the pandemic of coronavirus disease 2019 (COVID-19) which can be seen in the table \@ref(fig:tablenew) as contact tracing changed to level 2. The ISA's advanced digital surveillance capabilities allowed the agency to comprehensively track infected people and their close contacts. As can be seen in figure \@ref(fig:plotanim), after this was implemented amongst other gathering and travel restrictions the number of daily cases in the country were brought in check immediately and the curve was somehow flattened. When the contact tracing was at level 2, which was from 17th March 2020 to the first week of June 2020 the cases were very well restricted and **not once were more than 1000 cases were reported in a single day**. **Only thrice** more than 1000 cases were reported in a single day all of which were in the first week of July.
+
+
+## Maybe Not?
+
+```{r twoim, fig.cap="The animation shows how cases were reported since the beginning of the pandemic in Israel when contact tracing policy was at level 1.", echo=FALSE, warning=FALSE, message=FALSE}
+p2 <- Israel_dat_new %>% filter(contact_tracing == "1") %>%
+     ggplot(aes(x=date,y=Daily_Cases))+
+     geom_line(color="steelblue", linetype="longdash")+
+    labs(color = "Type")+
+    xlab("Month")+
+    ylab("Number of Confirmed Cases")+ggtitle("Contact Tracing at Level 1")+
+  transition_reveal(date)
+p2
+```
+
+The ISA started using a cache of mobile-phone-location data to help identify people who had crossed paths with patients who had tested positive. One month after the implementation of the mass-surveillance program for contact tracing, the Supreme Court of the state of Israel, in response to a petition submitted by human rights organizations, journalists and others, discussed the need for a middle ground to guard against the violation of basic human rights. The human rights officials argued that the detection rate of the mobile phone tracking was **not even close to being 100% accurate** and it interfered with the **privacy** of individuals. In accordance with the Supreme Court’s decision, on 5 May 2020, the Israeli parliament approved a 3-week extension of the emergency regulations, including digital contact tracing by the ISA and was discontinued thereafter. ^[The contact tracing policy was returned to level 2 for a brief period of 9 days from 26th June 2020 to 04th July 2020].
+
+This meant that the contact tracing went back to level 1 and as can be seen in figure \@ref(fig:twoim) the cases have been on the rise ever since and the number on daily cases reported have been less than 1000 a day, only a handful number of times. 
+
+# Stringency Index and It's Outcome.
+
+## What is a Stringency Index?
+
+As mentioned in the data description the **stringency index** the variation in the government's containment and closure policies. The various containment and closure polices include  **school closing**, **workplace closing**, **cancelling of public events**, **internal and international travel restrictions** amongst others. For each of the above measures, a score is created taking the ordinal value and a constant weight is added. Then these are rescaled by their maximum value to create a score between 0 and 100 with a missing value contributing to 0. These scores are then averaged to get the composite Stringency Index.
+
+```{r striind, fig.cap="The Interactive figure shows the level of stringency index at any given point in the pandemic in Israel.", echo=FALSE, warning=FALSE, message=FALSE}
+stirplot <- Israel_dat_new %>%
+     ggplot(aes(x=date,y=stringency_index))+
+     geom_line(color="steelblue", linetype="solid")+
+    labs(color = "Type")+
+    xlab("Month")+
+    ylab("Stringency Index")+ggtitle("Stringency index across the year 2020 in Israel.")
+ggplotly(stirplot)
+
+```
+
+Figure \@ref(fig:striind) displays the stringency index in the country of Israel since it was first introduced. Figure \@ref(fig:striind) is interactive and hovering above it will show the stringency index at any given point in time over the past 6 months. The stringency index was at it's highest in the month of April, May and June and was relaxed a little after that.
+
+## How it influenced the Daily Cases, Deaths and Recoveries?
+
+To find out how the stringency index affected the COVID-19 situation in the country, we have made use of a matrix scatterplot. A matrix scatterplot shows the relationship between the different variables selected and if a correlation exists between them.
+
+```{r corfig, fig.cap="The interactive figure shows the correlation between stringency index and daily cases, deaths and recoveries in Israel.", echo=FALSE, warning=FALSE, message=FALSE}
+library(plotly)
+israel_cor_b <- Israel_dat_new %>%
+dplyr::select(date,Daily_Cases,Daily_Deaths,Daily_Recoveries,stringency_index)
+
+lowerFn <- function(data, mapping, method = "lm", ...) {
+  p <- ggplot(data = data, mapping = mapping) +
+    geom_point(colour = "blue",size=0.5) +
+    geom_smooth(method = method, color = "red", ...)
+  p
+}
+
+p <- highlight_key(israel_cor_b) %>%
+ggpairs(israel_cor_b, columnLabels = c("Date", "Cases", "Deaths","Recoveries", "Stringency"),lower = list(continuous = wrap(lowerFn,method="lm")),title = "Relationship between Daily Cases, Deaths and Recoveries") +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
+
+  ggplotly(p) %>%
+  highlight("plotly_selected") %>%
+    layout(margin=list(l = 100,t=50), yaxis=list(tickprefix=""))
+```
+
+Figure \@ref(fig:corfig) shows the matrix scatterplot with our variables of interest. The salient conclusions which can be drawn from figure \@ref(fig:corfig) are :
+
+- The variable **date** has a positive correlation with all the concerned variables with the strongest being with **Daily Cases** and the weakest being with **Stringency index**. This means that as the months have passed by, the number of cases, deaths and recoveries have all continued to increase.
+
+- **Stringency Index** does not show a very strong correlation with any of the other variables but in spite of being a weak correlation, stringency index is negatively related to the number of daily cases. This means that when the stringency index was at its peak, the number of daily new cases were kept in check through the closure and containment policies of the Israeli government.
+
+Overall, the Israel government followed a very proactive yet innovative approach in it's attempt to tackle the pandemic. **179k+ cases** but less than **1.2k deaths** and **130k+ recoveries** in the past 6 months is a decent effort to manage this pandemic which has brought the entire world to a standstill!
+
+# References
+
+- Cohn-Schwartz, E., Sagi, D., O'Rourke, N., & Bachner, Y. G. (2020). The coronavirus pandemic and Holocaust survivors in Israel. Psychological Trauma: Theory, Research, Practice, and Policy, 12(5), 502.
+
+- (2020). Retrieved 22 September 2020, from https://www.bsg.ox.ac.uk/sites/default/files/2020-04/BSG-WP-2020-032-v5.0.pdf
+
+- Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686,  https://doi.org/10.21105/joss.01686
+
+- Yihui Xie, Joe Cheng and Xianying Tan (2020). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.15. https://CRAN.R-project.org/package=DT
+
+- Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL http://www.jstatsoft.org/v40/i03/.
+
+- Barret Schloerke, Di Cook, Joseph Larmarange, Francois Briatte, Moritz Marbach, Edwin Thoen, Amos Elberg and Jason Crowley (2020). GGally: Extension to 'ggplot2'. R package version 2.0.0. https://CRAN.R-project.org/package=GGally
+
+- Simon Urbanek (2013). png: Read and write PNG images. R package version 0.1-7. https://CRAN.R-project.org/package=png
+
+- Jeroen Ooms (2018). gifski: Highest Quality GIF Encoder. R package version 0.8.6. https://CRAN.R-project.org/package=gifski
+
+- Thomas Lin Pedersen and David Robinson (2020). gganimate: A Grammar of Animated Graphics. R package version 1.0.6. https://CRAN.R-project.org/package=gganimate
+
+- C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida, 2020.
