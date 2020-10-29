@@ -1,0 +1,64 @@
+---
+title: "Spread of COVID-19 in Asian Countries"
+description: |
+  "All countries need to review their strategies now." - Dr. Tedros Adhanom, WHO director general
+author:
+  - name: SIDDHANT TIRODKAR 
+    affiliation: Monash University
+date: 10-15-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# About
+
+The purpose of writing this blog is to introduce a [shiny app](https://siddhant-tirodkar-96.shinyapps.io/shiny-assessment-Siddhant-96/) made to assess and compare the spread of corona virus in major Asian countries. The countries included are India, Pakistan, China, Bangladesh, Nepal, Srilanka and Maldives. The app consists of three separate tabs which explain the cumulative, current and also provides a statistical summary of the situation of the virus in these countries.
+
+![Glimpse of the App.](page1.png)
+
+## Data
+
+The data used for this blog is acquired from the CRAN package **COVID19** which is available in R.
+
+# Overview of the App
+
+As mentioned earlier the app consists of **3** separate tabs namely **Cases over time**, **Daily cases** and **Monthly statistics**. The app also contains an about section to explain the purpose of creating the app. The brief explanation of the tabs and how to use them are provided below.
+
+- **Cases over time** - This tab enables the user to check the cumulative COVID19 summary for any of the countries. The tab takes the choice of the country and a time frame as the user input. The user input renders a line graph with the count on the y-axis and the time frame or the month on the x-axis. The figure shows the total cases, active cases, total deaths and recoveries for the country and the time frame chosen by the user.
+
+- **Daily cases** - This tab enables the user to check the daily COVID19 impact for all of the countries together for better differentiation. The tab takes the choice of the parameter and date as the user input. The user input renders a leaflet map of the Asian region and the parameter chosen by the user are displayed for all the countries with the help of colourful circles. The legend is displayed at the top to enable the user to differentiate between the counts for all the countries. 
+
+- **Monthly statistics** - This tab enables the user to check the monthly effects of COVID19 on the Asian countries. The tab takes the choice of country as the user input. The user input renders a monthly statistical summary for the country selected. Monthly statistics include the average cases, average deaths, average recoveries and the stringency index that prevailed in the month.
+
+# Self Review
+
+## Strengths
+
+The shiny app is structured in a proper and organized manner. All the tabs contain meaningful and accurate descriptions of what is depicted in the rendered output. The app is extremely user friendly and illustrates relevant information. It also enables precise comparisons between various parameters in the first tab and comparisons between different countries in the second tab. The third tab of the app also provides a statistical summary of various parameters of all the countries which is especially fulfilling. Altogether, it is a satisfactory effort towards making a shiny application.
+
+## Weaknesses
+
+In spite of the adequate efforts there are certain areas which can be improved at in the app. For instance, inside the second tab, the leaflet map does not include a caption and same is the case with the table under the third tab. 
+
+![Missing caption over the leaflet map.](page2.png)
+
+Another pertinent issue which is alarming is the fact that in the table under the summary tab all the counts are rounded off to 2 decimal points which can come across as very accurate but if it is glanced at in a practical manner, the number of deaths, recoveries or cases should always be a whole number. Instead of rounding off to 2 decimal places, it should have been rounded off to a whole number.
+
+![Statistics rounded off to 2 decimal places.](page3.png)
+
+## Limitations
+
+One thing which could've been added is the inclusion of more countries instead of just 7. Also, under the first tab rather than drawing comparisons between the parameters of a single country, the comparisons could've been made between various countries at once by having a different input for the parameters and selecting more than one country in the existing input.
+
+One technical limitation I can think of is in the leaflet map, the names of the countries appear in foreign languages which I couldn't change to English. Another being the data for the countries selected does not have the details for states and regional territories which could've been critical for intra-country comparisons.
+
+# References
+
+Guidotti, E., Ardia, D., (2020), "COVID-19 Data Hub", Journal of Open Source Software 5(51):2376, doi: 10.21105/joss.02376.
+

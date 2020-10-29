@@ -1,0 +1,65 @@
+---
+title: "Package Review of Covid19Viz"
+description: |
+  "Feedback is the breakfast of champions." - Ken Blanchard
+author:
+  - name: SIDDHANT TIRODKAR 
+    affiliation: Monash University
+date: 10-29-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# About
+
+The purpose of writing this blog is to review an R package [**'Covid19Viz'**](https://github.com/etc5523-2020/r-package-assessment-aryan-monash) developed by Aryan Jain. The package essentially consists of an embedded shiny application which explores the spread of COVID-19 across various nations and also compares the measures taken by these countries to combat the virus. The package consists of a function **launch_app()** which successfully launches the app. The app has a very coherent user interface and works perfectly well after changing the parameters.
+
+# Expectations & Functionality
+
+After going through the documentation and the readme file I was able to successfully install the package from the link provided and using the **launch_app()** function connected me to a beautifully structured and very well organised **"COVID-19 Visualising App".** The app is amazingly constructed and gives practical information about the spread and measures taken to fight the virus. The package also has 2 functions **"input_tab()"** and **"select_metric()"** which ensures the code is clear, well departmentalized and avoids multiple occurrences of the same code. The package also successfully completed both the unit tests. It is safe to say that the package lived up to all the expectations I had out of it.
+
+# Scope for Improvement
+
+Though it was difficult, I could think of three areas where there might exist a slight scope for improvement :
+
+- The package has no mention of references. Also, one peculiar thing being the **Covid19Viz package** has a pre-requisite of the **COVID-19 cran** package as all the data used comes from that. But the COVID-19 package is not mentioned in the description file as a pre-requisite or referred anywhere.
+
+- The table used in the app does not portray a lot of valuable information. It only shows the cumulative counts of the parameter chosen as is depicted in the graph whereas there was scope for giving different and relevant information like daily or active cases.
+
+- The app also lacks statistical inferences. The app does not contain any information which is statistically significant.
+
+- The app is very coherent and to the point but I believe a little more information wouldn't have hurt. A little bigger description tile and captioning the figures and tables would've worked wonders.
+
+# Conclusion
+
+All in all it was an excellent effort by **Aryan Jain** to make the **Covid19Viz** package. The main learning outcome out of reviewing this package is the importance of peer review and it's outcomes. After reviewing this package is when I understood that there are so many things I could've done differently in my own package and it has motivated me to do better henceforth.
+
+# Appendix
+
+- [x] As the reviewer I confirm that there are no [conflicts of interest](https://devguide.ropensci.org/policies.html#coi) for me to review this work (If you are unsure whether you are in conflict, please speak to your editor _before_ starting your review).
+
+## Documentation
+
+The package includes all the following forms of documentation:
+
+- [x] **Installation instructions:** for the development version of package and any non-standard dependencies in README
+- [x] **Vignette(s)** demonstrating major functionality that runs successfully locally
+- [x] **Function Documentation:** for all exported functions in R help
+- [ ] **Examples** for all exported functions in R Help that run successfully locally
+
+## Functionality
+
+- [x] **Installation:** Installation succeeds as documented.
+- [x] **Functionality:** Any functional claims of the software been confirmed.
+- [x] **Automated tests:** Unit tests cover essential functions of the package
+   and a reasonable range of inputs and conditions. All tests pass on the local machine.
+- [x] **Packaging guidelines**: The package conforms to the rOpenSci packaging guidelines
+
+
+

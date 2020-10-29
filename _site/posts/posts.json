@@ -1,5 +1,37 @@
 [
   {
+    "path": "posts/review/",
+    "title": "Package Review of Covid19Viz",
+    "description": "\"Feedback is the breakfast of champions.\" - Ken Blanchard",
+    "author": [
+      {
+        "name": "SIDDHANT TIRODKAR",
+        "url": {}
+      }
+    ],
+    "date": "2020-10-29",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-10-29T20:01:20+11:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/Shiny-review/",
+    "title": "Spread of COVID-19 in Asian Countries",
+    "description": "\"All countries need to review their strategies now.\" - Dr. Tedros Adhanom, WHO director general",
+    "author": [
+      {
+        "name": "SIDDHANT TIRODKAR",
+        "url": {}
+      }
+    ],
+    "date": "2020-10-15",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-10-15T21:00:14+11:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/Isr-covid/",
     "title": "Israel's Innovatiove approach & It's Shortcomings",
     "description": "\"There's a way to do it better - find it.\" - Thomas A. Edison",
